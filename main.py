@@ -3,26 +3,40 @@ from constants import *
 from player import *
 
 def main():
+    # Initialize game
     pygame.init()
+
+    #Setup display
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption(TITLE)
+
+    # Set clock
     game_clock = pygame.time.Clock()
+    
+    # Delta time initializer
     dt = 0
     player_one = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
     while True:
+        # Clear the screen
         screen.fill((0, 0, 0))
-        player_one.draw(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-            
-       
-        dt = game_clock.tick() / 1000
+        
+        # Update the player based on the keyboard
+        player_one.update(dt)
+
+        # Draw the player
+        player_one.draw(screen)
+        
+        # Update the display
         pygame.display.flip()
-    #print("Starting asteroids!")
-    #print("Screen width: 1280")
-    #print("Screen height: 720")
+        
+        # Calculate delta time
+        dt = game_clock.tick() / 1000
+        
 
 if __name__ == "__main__":
     main()
