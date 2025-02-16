@@ -4,9 +4,17 @@ from constants import *
 
 class Player(CircleShape):
     def __init__(self, x, y):
+        # Initializing
         super().__init__(x, y, PLAYER_RADIUS)
+        
+        # Initialize Player's position and any other attributes
+        self.image = pygame.Surface((PLAYER_RADIUS * 2, PLAYER_RADIUS * 2), pygame.SRCALPHA)
+        pygame.draw.circle(self.image, "white", (PLAYER_RADIUS, PLAYER_RADIUS), PLAYER_RADIUS)
+        self.rect = self.image.get_rect(center=(x, y))
+        
+        # Rotation set to 0
         self.rotation = 0
-    
+
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5

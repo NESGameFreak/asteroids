@@ -15,27 +15,37 @@ def main():
     
     # Delta time initializer
     dt = 0
+
+    # Creating Groups
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    
+    # Create containers
+    Player.containers = (updatable, drawable)
+
+    # Create plyer
     player_one = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
     while True:
-        # Clear the screen
-        screen.fill((0, 0, 0))
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
         
-        # Update the player based on the keyboard
-        player_one.update(dt)
+        # Update based on the keyboard
+        updatable.update(dt)
 
-        # Draw the player
-        player_one.draw(screen)
+        # Draw the game
+        # Clear the screen
+        screen.fill("black")
+        
+        for obj in drawable:
+            obj.draw(screen)
         
         # Update the display
         pygame.display.flip()
         
         # Calculate delta time
-        dt = game_clock.tick() / 1000
+        dt = game_clock.tick(60) / 1000
         
 
 if __name__ == "__main__":
