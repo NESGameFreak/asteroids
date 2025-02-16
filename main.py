@@ -1,8 +1,10 @@
 import pygame
+import sys
 from asteroid import *
 from constants import *
 from player import *
 from asteroidfield import *
+from circleshape import *
 
 def main():
     # Initialize game
@@ -49,8 +51,14 @@ def main():
         
         # Update the display
         pygame.display.flip()
-        
-        # Calculate delta time
+
+        # Check for collisions
+        for asteroid in asteroids:
+            if player_one.collision_detection(asteroid):
+                print("Game Over!")
+                sys.exit()
+            
+        # Calculate delta time for 60 fps
         dt = game_clock.tick(60) / 1000
         
 
