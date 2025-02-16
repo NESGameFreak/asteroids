@@ -1,6 +1,8 @@
 import pygame
+from asteroid import *
 from constants import *
 from player import *
+from asteroidfield import *
 
 def main():
     # Initialize game
@@ -19,12 +21,16 @@ def main():
     # Creating Groups
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
     
     # Create containers
     Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable,)
 
-    # Create plyer
+    # Create objects
     player_one = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    falling_rocks = AsteroidField()
 
     while True:
         for event in pygame.event.get():
@@ -34,10 +40,10 @@ def main():
         # Update based on the keyboard
         updatable.update(dt)
 
-        # Draw the game
         # Clear the screen
         screen.fill("black")
         
+        # Draw the game
         for obj in drawable:
             obj.draw(screen)
         
