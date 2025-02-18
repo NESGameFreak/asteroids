@@ -4,7 +4,6 @@ from asteroid import *
 from constants import *
 from player import *
 from asteroidfield import *
-from circleshape import *
 from shot import *
 
 def main():
@@ -30,11 +29,11 @@ def main():
     # Create containers
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
-    AsteroidField.containers = (updatable,)
-    Shot.containers = (updatable, drawable, shots)
+    AsteroidField.containers = updatable
+    Shot.containers = (shots, updatable, drawable)
 
     # Create objects
-    player_one = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, shots)
+    player_one = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     falling_rocks = AsteroidField()
 
     while True:
@@ -44,9 +43,6 @@ def main():
         
         # Update based on the keyboard
         updatable.update(dt)
-
-        # Decrease shot timer
-        player_one.timer -= dt
 
         # Clear the screen
         screen.fill("black")
@@ -60,9 +56,17 @@ def main():
 
         # Check for collisions
         for asteroid in asteroids:
+            # Asteroids vs players
             if player_one.collision_detection(asteroid):
                 print("Game Over!")
                 sys.exit()
+
+            # Shots vs asteroids
+            for shot in shots:
+                if asteroid.collision_detection(shot):
+                    shot.kill()
+                    asteroid.kill()
+                
             
         # Calculate delta time for 60 fps
         dt = game_clock.tick(60) / 1000

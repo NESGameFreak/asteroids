@@ -1,12 +1,11 @@
 import pygame
-from circleshape import *
+from circleshape import CircleShape
 from constants import *
 
 class Shot(CircleShape):
-    def __init__(self, x, y, velocity):
+    def __init__(self, x, y):
         # Initializaing inheritance
         super().__init__(x, y, SHOT_RADIUS)
-        self.velocity = velocity
 
     def draw(self, screen):
         # Asteroids are drawn as circles

@@ -1,24 +1,15 @@
 import pygame
-from circleshape import *
+from circleshape import CircleShape
 from constants import *
-from shot import *
+from shot import Shot
 
 class Player(CircleShape):
-    def __init__(self, x, y, shots_group):
+    def __init__(self, x, y):
         # Initializing inheritance
         super().__init__(x, y, PLAYER_RADIUS)
-        
-        # Initialize Player's position and images
-        self.image = pygame.Surface((PLAYER_RADIUS * 2, PLAYER_RADIUS * 2), pygame.SRCALPHA)
-        pygame.draw.circle(self.image, "white", (PLAYER_RADIUS, PLAYER_RADIUS), PLAYER_RADIUS)
-        self.rect = self.image.get_rect(center=(x, y))
-        
         # Rotation and timer set to 0
         self.rotation = 0
-        self.timer = 0
-
-        # Add shots
-        self.shots = shots_group
+        self.shot_timer = 0
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -35,6 +26,7 @@ class Player(CircleShape):
         self.rotation += PLAYER_TURN_SPEED * dt
 
     def update(self, dt):
+        self.shot_timer -= dt
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -53,13 +45,12 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
     
     def shoot(self):
-        # Calculate velocity
-        velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-
-        # Create bullet with position and velocity
-        # If cooldown is in effect
-        if self.timer <= 0:
-            bullet = Shot(self.position.x, self.position.y, velocity)
-
+        # Stop if during cooldown
+        if self.shot_timer > 0:
+            return
         # Add timer cooldown
-        self.timer = PLAYER_SHOOT_COOLDOWN
+        self.shot_timer = PLAYER_SHOOT_COOLDOWN
+        # Creat the shot
+        shot = Shot(self.position.x, self.position.y)
+        # Calculate velocity
+        shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED        
