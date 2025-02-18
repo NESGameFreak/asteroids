@@ -8,13 +8,14 @@ class Player(CircleShape):
         # Initializing inheritance
         super().__init__(x, y, PLAYER_RADIUS)
         
-        # Initialize Player's position and any other attributes
+        # Initialize Player's position and images
         self.image = pygame.Surface((PLAYER_RADIUS * 2, PLAYER_RADIUS * 2), pygame.SRCALPHA)
         pygame.draw.circle(self.image, "white", (PLAYER_RADIUS, PLAYER_RADIUS), PLAYER_RADIUS)
         self.rect = self.image.get_rect(center=(x, y))
         
-        # Rotation set to 0
+        # Rotation and timer set to 0
         self.rotation = 0
+        self.timer = 0
 
         # Add shots
         self.shots = shots_group
@@ -56,4 +57,9 @@ class Player(CircleShape):
         velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
 
         # Create bullet with position and velocity
-        bullet = Shot(self.position.x, self.position.y, velocity)
+        # If cooldown is in effect
+        if self.timer <= 0:
+            bullet = Shot(self.position.x, self.position.y, velocity)
+
+        # Add timer cooldown
+        self.timer = PLAYER_SHOOT_COOLDOWN

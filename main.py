@@ -45,6 +45,9 @@ def main():
         # Update based on the keyboard
         updatable.update(dt)
 
+        # Decrease shot timer
+        player_one.timer -= dt
+
         # Clear the screen
         screen.fill("black")
         
