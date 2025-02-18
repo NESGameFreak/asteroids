@@ -65,9 +65,8 @@ def main():
             for shot in shots:
                 if asteroid.collision_detection(shot):
                     shot.kill()
-                    asteroid.kill()
+                    asteroid.split()
                 
-            
         # Calculate delta time for 60 fps
         dt = game_clock.tick(60) / 1000
         
